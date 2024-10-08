@@ -1,0 +1,2 @@
+# pipelines
+Common pipelines collection
