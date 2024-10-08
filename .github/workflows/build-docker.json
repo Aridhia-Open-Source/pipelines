@@ -1,0 +1,5 @@
+{
+    "name": "Docker build image",
+    "description": "Common build docker images with optional commit hash tag"
+}
+
