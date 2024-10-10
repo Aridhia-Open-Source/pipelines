@@ -1,27 +1,28 @@
 name: Build Docker Image
 run-name: Building image
 on:
-    workflow_call:
-        inputs:
-            IMAGE:
-                required: true
-                type: string
-            TAG:
-                required: true
-                type: string
-            BUILD_PATH:
-                required: true
-                type: string
-            DOCKER_ACR:
-                required: true
-                type: string
-            HASH_SUFFIX:
-                required: false
-                default: true
-                type: boolean
-        secrets:
-            DOCKER_TOKEN:
-                required: true
+  workflow_call:
+    inputs:
+      IMAGE:
+        required: true
+        type: string
+      TAG:
+        required: true
+        type: string
+      BUILD_PATH:
+        required: true
+        type: string
+      DOCKER_ACR:
+        required: true
+        type: string
+      HASH_SUFFIX:
+        required: false
+        default: true
+        type: boolean
+    secrets:
+      DOCKER_TOKEN:
+        required: true
+        description: A token to authenticate against DOCKER_ACR
 
 jobs:
   build:
@@ -37,15 +38,15 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Set Tag for dev branches
+      - name: Set Tag for dev branches with commit hash
         if: github.ref != 'refs/heads/main' && inputs.HASH_SUFFIX
         run: |
-                echo "TAG=${TAG}-${GITHUB_SHA::6}" >> ${GITHUB_ENV}
+          echo "TAG=${{ inputs.TAG }}-${GITHUB_SHA::6}" >> ${GITHUB_ENV}
 
       - name: Set Tag for dev branches
         if: github.ref != 'refs/heads/main' && !inputs.HASH_SUFFIX
         run: |
-                echo "TAG=${TAG}-dev" >> ${GITHUB_ENV}
+          echo "TAG=${{ inputs.TAG }}-dev" >> ${GITHUB_ENV}
 
       # Need to get an ACR where to push the image
       - name: Login to Docker Hub
