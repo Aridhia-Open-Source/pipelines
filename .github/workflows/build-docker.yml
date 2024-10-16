@@ -23,7 +23,8 @@ on:
       DOCKER_TOKEN:
         required: true
         description: A token to authenticate against DOCKER_ACR
-
+env:
+  TAG: ${{ inputs.TAG }}
 jobs:
   build:
     defaults:
@@ -65,5 +66,5 @@ jobs:
         with:
           context: ${{ inputs.BUILD_PATH }}
           file: ${{ inputs.BUILD_PATH }}/Dockerfile
-          tags: ${{ inputs.DOCKER_ACR }}/${{ env.OWNER_LC }}/${{ inputs.IMAGE }}:${{ inputs.TAG }}
+          tags: ${{ inputs.DOCKER_ACR }}/${{ env.OWNER_LC }}/${{ inputs.IMAGE }}:${{ env.TAG }}
           push: true
