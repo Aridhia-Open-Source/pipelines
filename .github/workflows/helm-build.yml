@@ -12,6 +12,13 @@ on:
       VERSION:
         required: true
         type: string
+      PATH_BUILD:
+        required: true
+        type: string
+      PATH_CHART:
+        required: false
+        type: string
+        default: ../../artifacts/
     secrets:
       HELM_TOKEN:
         required: true
@@ -27,9 +34,9 @@ jobs:
       steps:
       - uses: actions/checkout@v4
       - name: Build helm archive
-        working-directory: k8s/federated-node
+        working-directory: ${{ inputs.PATH_BUILD }}
         run: |
-            helm package . -d ../../artifacts/ --version ${{ inputs.VERSION }}
+            helm package . -d ${{ inputs.PATH_CHART }} --version ${{ inputs.VERSION }}
 
       - name: Set helm channel to develop for dev branches
         if: github.ref != 'refs/heads/master'
