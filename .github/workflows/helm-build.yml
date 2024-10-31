@@ -12,6 +12,9 @@ on:
       VERSION:
         required: true
         type: string
+      CHART_NAME:
+        required: true
+        type: string
       PATH_BUILD:
         required: true
         type: string
@@ -45,13 +48,13 @@ jobs:
       - name: Push to GitLab Package Artifact
         run: |
             curl --request POST \
-            --form 'chart=@artifacts/federated-node-${{ inputs.VERSION }}.tgz' \
+            --form 'chart=@artifacts/${{ inputs.CHART_NAME }}-${{ inputs.VERSION }}.tgz' \
             --user ${{ inputs.USER_HELM }}:${{ secrets.HELM_TOKEN }} \
             ${{ inputs.HELM_REPO }}/helm/api/${{ env.HELM_CHANNEL }}/charts
 
       - name: Publish Release
         uses: ncipollo/release-action@v1
         with:
-            artifacts: "artifacts/federated-node-${{ inputs.VERSION }}.tgz"
+            artifacts: "artifacts/${{ inputs.CHART_NAME }}-${{ inputs.VERSION }}.tgz"
             tag: ${{ inputs.VERSION }}
             skipIfReleaseExists: true
