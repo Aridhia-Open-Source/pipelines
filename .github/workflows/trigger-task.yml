@@ -43,10 +43,11 @@ jobs:
             echo "No user found"
             exit 1
           fi
+          idpId=$(gh api users/${AUTHOR} | jq -r '.id')
           git config --global user.name 'BotMan'
           git config --global user.email 'r-casula@users.noreply.github.com'
 
-          echo "$TEMPL_CONTENTS" | jq ".spec |= .+ {\"user\": {\"username\": $AUTHOR}, \"repository\": \"${{ github.repository }}\", \"organization\": \"${{ github.repository_owner }}\"}" > ${{ inputs.TEMPLATE_PATH }}
+          echo "$TEMPL_CONTENTS" | jq ".spec |= .+ {\"user\": {\"username\": $AUTHOR, \"idpId\": $idpId}, \"repository\": \"${{ github.repository }}\", \"organization\": \"${{ github.repository_owner }}\"}" > ${{ inputs.TEMPLATE_PATH }}
           git add ${{ inputs.TEMPLATE_PATH }}
           git commit -am "Added user info"
           git push
