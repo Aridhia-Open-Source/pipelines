@@ -1,0 +1,50 @@
+name: Build Docker Image
+run-name: Building image
+on:
+  workflow_call:
+    inputs:
+      HELM_REPO:
+        required: true
+        type: string
+      USER_HELM:
+        required: true
+        type: string
+      VERSION:
+        required: true
+        type: string
+    secrets:
+      HELM_TOKEN:
+        required: true
+        description: A token to authenticate against the Helm Repository
+env:
+  HELM_CHANNEL: stable
+
+jobs:
+    helm:
+      runs-on: ubuntu-latest
+      permissions:
+        contents: write
+      steps:
+      - uses: actions/checkout@v4
+      - name: Build helm archive
+        working-directory: k8s/federated-node
+        run: |
+            helm package . -d ../../artifacts/ --version ${{ inputs.VERSION }}
+
+      - name: Set helm channel to develop for dev branches
+        if: github.ref != 'refs/heads/master'
+        run: echo "HELM_CHANNEL=develop" >> ${GITHUB_ENV}
+
+      - name: Push to GitLab Package Artifact
+        run: |
+            curl --request POST \
+            --form 'chart=@artifacts/federated-node-${{ inputs.VERSION }}.tgz' \
+            --user ${{ inputs.USER_HELM }}:${{ secrets.HELM_TOKEN }} \
+            ${{ inputs.HELM_REPO }}/helm/api/${{ env.HELM_CHANNEL }}/charts
+
+      - name: Publish Release
+        uses: ncipollo/release-action@v1
+        with:
+            artifacts: "artifacts/federated-node-${{ inputs.VERSION }}.tgz"
+            tag: ${{ inputs.VERSION }}
+            skipIfReleaseExists: true

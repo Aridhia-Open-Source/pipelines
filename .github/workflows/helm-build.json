@@ -1,0 +1,4 @@
+{
+    "name": "Helm Chart packaging Pipeline",
+    "description": "Common helm chart build with optional develop version tag"
+}
