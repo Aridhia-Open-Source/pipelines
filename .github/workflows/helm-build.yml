@@ -42,7 +42,7 @@ jobs:
             helm package . -d ${{ inputs.PATH_CHART }} --version ${{ inputs.VERSION }}
 
       - name: Set helm channel to develop for dev branches
-        if: github.ref != 'refs/heads/master'
+        if: github.ref != 'refs/heads/main'
         run: echo "HELM_CHANNEL=develop" >> ${GITHUB_ENV}
 
       - name: Push to GitLab Package Artifact
