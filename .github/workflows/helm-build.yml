@@ -50,7 +50,7 @@ jobs:
           git fetch
           git checkout gh-pages
           mv artifacts/${{ inputs.CHART_NAME }}-${{ inputs.VERSION }}.tgz docs/
-          helm repo index ${{ inputs.CHART_NAME }}
+          helm repo index docs
           git add docs/
           git commit -m "Version ${{ inputs.VERSION }}"
           git push
