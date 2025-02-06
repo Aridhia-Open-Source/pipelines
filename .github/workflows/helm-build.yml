@@ -44,7 +44,7 @@ jobs:
       - name: Build helm archive
         working-directory: ${{ inputs.PATH_BUILD }}
         run: |
-            helm package . -d ${{ inputs.PATH_CHART }} --version ${{ inputs.VERSION }}
+            helm package . -d ${{ inputs.PATH_CHART }} --version ${{ inputs.VERSION }} --appVersion ${{ inputs.APP_VERSION }}
 
       - name: Set helm channel to develop for dev branches
         if: github.ref != 'refs/heads/main'
@@ -57,15 +57,6 @@ jobs:
           git fetch
           git checkout ${{ inputs.PAGES_BRANCH }}
           mv artifacts/${{ inputs.CHART_NAME }}-${{ inputs.VERSION }}.tgz ${{ inputs.PAGES_BRANCH_PATH }}/
-
-          CHART_PATH="${{ inputs.PATH_BUILD }}/Chart.yaml"
-          version=$(grep 'version:.*' ${CHART_PATH} | sed 's/^.*: //')
-          echo "Chart version: ${version}"
-          appVersion=$(grep 'appVersion:.*' ${CHART_PATH} | sed 's/^.*: \"//'| sed 's/\"//')
-          echo "Chart appVersion: ${appVersion}"
-
-          sed -i "s/${version}/${version}${DEV_SUFFIX}/" ${CHART_PATH}
-          sed -i "s/${appVersion}/${TAG}/" ${CHART_PATH}
 
           helm repo index ${{ inputs.PAGES_BRANCH_PATH }}
           git add ${{ inputs.PAGES_BRANCH_PATH }}
