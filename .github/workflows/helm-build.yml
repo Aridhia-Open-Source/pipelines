@@ -50,6 +50,9 @@ jobs:
 
       - name: Push to GitHub pages
         run: |
+          echo "contents:"
+          ls
+          ls ${{ inputs.PATH_CHART }}
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           git fetch
