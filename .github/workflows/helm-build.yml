@@ -22,6 +22,14 @@ on:
         required: false
         type: string
         default: ../../artifacts/
+      PAGES_BRANCH:
+        required: false
+        type: string
+        default: gh-pages
+      PAGES_BRANCH_PATH:
+        required: false
+        type: string
+        default: docs
     secrets:
       HELM_TOKEN:
         required: true
@@ -50,10 +58,10 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           git fetch
-          git checkout gh-pages
-          mv artifacts/${{ inputs.CHART_NAME }}-${{ inputs.VERSION }}.tgz docs/
-          helm repo index docs
-          git add docs/
+          git checkout ${{ inputs.PAGES_BRANCH }}
+          mv artifacts/${{ inputs.CHART_NAME }}-${{ inputs.VERSION }}.tgz ${{ inputs.PAGES_BRANCH_PATH }}/
+          helm repo index ${{ inputs.PAGES_BRANCH_PATH }}
+          git add ${{ inputs.PAGES_BRANCH_PATH }}
           git commit -m "Version ${{ inputs.VERSION }}"
           git push
 
