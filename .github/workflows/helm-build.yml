@@ -18,7 +18,7 @@ on:
       PATH_CHART:
         required: false
         type: string
-        default: ${{ github.workspace }}/artifacts
+        default: artifacts
       PAGES_BRANCH:
         required: false
         type: string
@@ -46,21 +46,17 @@ jobs:
       - name: Build helm archive
         working-directory: ${{ inputs.PATH_BUILD }}
         run: |
-            helm package . -d ${{ inputs.PATH_CHART }} --version ${{ inputs.VERSION }} --app-version ${{ inputs.APP_VERSION }}
+            helm package . -d ${{ github.workspace }}/${{ inputs.PATH_CHART }} --version ${{ inputs.VERSION }} --app-version ${{ inputs.APP_VERSION }}
 
       - name: Push to GitHub pages
         run: |
-          echo "contents:"
-          ls
-          ls ${{ inputs.PATH_CHART }}
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           git fetch
           git checkout ${{ inputs.PAGES_BRANCH }}
           echo "contents:"
-          ls
-          ls ${{ inputs.PATH_CHART }}
-          mv ${{ inputs.PATH_CHART }}/${{ inputs.CHART_NAME }}-${{ inputs.VERSION }}.tgz ${{ inputs.PAGES_BRANCH_PATH }}/
+          ls ${{ github.workspace }}/${{ inputs.PATH_CHART }}
+          mv ${{ github.workspace }}/${{ inputs.PATH_CHART }}/${{ inputs.CHART_NAME }}-${{ inputs.VERSION }}.tgz ${{ inputs.PAGES_BRANCH_PATH }}/
 
           helm repo index ${{ inputs.PAGES_BRANCH_PATH }}
           git add ${{ inputs.PAGES_BRANCH_PATH }}
