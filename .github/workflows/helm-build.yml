@@ -31,8 +31,6 @@ on:
       HELM_TOKEN:
         required: true
         description: A token to authenticate against the Helm Repository
-env:
-  HELM_CHANNEL: stable
 
 jobs:
     helm:
@@ -45,10 +43,6 @@ jobs:
         working-directory: ${{ inputs.PATH_BUILD }}
         run: |
             helm package . -d ${{ inputs.PATH_CHART }} --version ${{ inputs.VERSION }} --appVersion ${{ inputs.APP_VERSION }}
-
-      - name: Set helm channel to develop for dev branches
-        if: github.ref != 'refs/heads/main'
-        run: echo "HELM_CHANNEL=develop" >> ${GITHUB_ENV}
 
       - name: Push to GitHub pages
         run: |
