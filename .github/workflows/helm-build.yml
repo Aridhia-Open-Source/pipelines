@@ -29,8 +29,8 @@ on:
         default: docs
       IS_TAG:
         required: false
-        type: boolean
-        default: false
+        type: string
+        default: 'false'
     secrets:
       HELM_TOKEN:
         required: true
@@ -67,4 +67,4 @@ jobs:
             artifacts: "artifacts/${{ inputs.CHART_NAME }}-${{ inputs.VERSION }}.tgz"
             tag: ${{ inputs.VERSION }}
             skipIfReleaseExists: true
-            makeLatest: ${{ inputs.IS_TAG }}
+            makeLatest: ${{ inputs.IS_TAG == 'true'}}
