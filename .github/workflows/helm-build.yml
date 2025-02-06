@@ -45,12 +45,14 @@ jobs:
         if: github.ref != 'refs/heads/main'
         run: echo "HELM_CHANNEL=develop" >> ${GITHUB_ENV}
 
-      - name: Push to GitLab Package Artifact
+      - name: Push to GitHub pages
         run: |
-            curl --request POST \
-            --form 'chart=@artifacts/${{ inputs.CHART_NAME }}-${{ inputs.VERSION }}.tgz' \
-            --user ${{ inputs.USER_HELM }}:${{ secrets.HELM_TOKEN }} \
-            ${{ inputs.HELM_REPO }}/helm/api/${{ env.HELM_CHANNEL }}/charts
+            git checkout gh-pages
+            mv artifacts/${{ inputs.CHART_NAME }}-${{ inputs.VERSION }}.tgz docs/
+            helm repo index fn-task-controller --url https://aridhia-open-source.github.io/federated-node-task-controller
+            git add docs/
+            git commit -m "Version ${{ inputs.VERSION }}"
+            git push
 
       - name: Publish Release
         uses: ncipollo/release-action@v1
