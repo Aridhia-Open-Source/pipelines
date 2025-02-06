@@ -47,12 +47,13 @@ jobs:
 
       - name: Push to GitHub pages
         run: |
-            git checkout gh-pages
-            mv artifacts/${{ inputs.CHART_NAME }}-${{ inputs.VERSION }}.tgz docs/
-            helm repo index fn-task-controller --url https://aridhia-open-source.github.io/federated-node-task-controller
-            git add docs/
-            git commit -m "Version ${{ inputs.VERSION }}"
-            git push
+          git fetch
+          git checkout gh-pages
+          mv artifacts/${{ inputs.CHART_NAME }}-${{ inputs.VERSION }}.tgz docs/
+          helm repo index fn-task-controller --url https://aridhia-open-source.github.io/federated-node-task-controller
+          git add docs/
+          git commit -m "Version ${{ inputs.VERSION }}"
+          git push
 
       - name: Publish Release
         uses: ncipollo/release-action@v1
