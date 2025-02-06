@@ -54,6 +54,8 @@ jobs:
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           git fetch
           git checkout ${{ inputs.PAGES_BRANCH }}
+          echo "contents:"
+          ls
           ls ${{ inputs.PATH_CHART }}
           mv ${{ inputs.PATH_CHART }}/${{ inputs.CHART_NAME }}-${{ inputs.VERSION }}.tgz ${{ inputs.PAGES_BRANCH_PATH }}/
 
