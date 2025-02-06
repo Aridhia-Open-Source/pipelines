@@ -18,7 +18,7 @@ on:
       PATH_CHART:
         required: false
         type: string
-        default: artifacts
+        default: ${{ github.workspace }}/artifacts
       PAGES_BRANCH:
         required: false
         type: string
