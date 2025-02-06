@@ -46,7 +46,7 @@ jobs:
       - name: Build helm archive
         working-directory: ${{ inputs.PATH_BUILD }}
         run: |
-            helm package . -d ${{ inputs.PATH_CHART }} --version ${{ inputs.VERSION }} --appVersion ${{ inputs.APP_VERSION }}
+            helm package . -d ${{ inputs.PATH_CHART }} --version ${{ inputs.VERSION }} --app-version ${{ inputs.APP_VERSION }}
 
       - name: Push to GitHub pages
         run: |
