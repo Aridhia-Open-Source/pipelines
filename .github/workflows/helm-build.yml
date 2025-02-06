@@ -3,13 +3,10 @@ run-name: Building image
 on:
   workflow_call:
     inputs:
-      HELM_REPO:
-        required: true
-        type: string
-      USER_HELM:
-        required: true
-        type: string
       VERSION:
+        required: true
+        type: string
+      APP_VERSION:
         required: true
         type: string
       CHART_NAME:
@@ -60,6 +57,16 @@ jobs:
           git fetch
           git checkout ${{ inputs.PAGES_BRANCH }}
           mv artifacts/${{ inputs.CHART_NAME }}-${{ inputs.VERSION }}.tgz ${{ inputs.PAGES_BRANCH_PATH }}/
+
+          CHART_PATH="${{ inputs.PATH_BUILD }}/Chart.yaml"
+          version=$(grep 'version:.*' ${CHART_PATH} | sed 's/^.*: //')
+          echo "Chart version: ${version}"
+          appVersion=$(grep 'appVersion:.*' ${CHART_PATH} | sed 's/^.*: \"//'| sed 's/\"//')
+          echo "Chart appVersion: ${appVersion}"
+
+          sed -i "s/${version}/${version}${DEV_SUFFIX}/" ${CHART_PATH}
+          sed -i "s/${appVersion}/${TAG}/" ${CHART_PATH}
+
           helm repo index ${{ inputs.PAGES_BRANCH_PATH }}
           git add ${{ inputs.PAGES_BRANCH_PATH }}
           git commit -m "Version ${{ inputs.VERSION }}"
