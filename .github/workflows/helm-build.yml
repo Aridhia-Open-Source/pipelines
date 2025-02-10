@@ -63,8 +63,9 @@ jobs:
 
       - name: Publish Release
         uses: ncipollo/release-action@v1
+        if: inputs.IS_TAG == 'true'
         with:
             artifacts: "${{ inputs.PAGES_BRANCH_PATH }}/${{ inputs.CHART_NAME }}-${{ inputs.VERSION }}.tgz"
             tag: ${{ inputs.VERSION }}
             skipIfReleaseExists: true
-            makeLatest: ${{ inputs.IS_TAG == 'true'}}
+            makeLatest: true
