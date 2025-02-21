@@ -33,8 +33,8 @@ on:
         default: 'false'
     secrets:
       HELM_TOKEN:
-        required: true
-        description: A token to authenticate against the Helm Repository
+        required: false
+        description: (Deprecated) A token to authenticate against the Helm Repository
 
 jobs:
     helm:
