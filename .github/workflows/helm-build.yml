@@ -31,10 +31,6 @@ on:
         required: false
         type: string
         default: 'false'
-    secrets:
-      HELM_TOKEN:
-        required: false
-        description: (Deprecated) A token to authenticate against the Helm Repository
 
 jobs:
     helm:
