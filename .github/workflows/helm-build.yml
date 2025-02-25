@@ -31,6 +31,10 @@ on:
         required: false
         type: string
         default: 'false'
+      HAS_SUBCHART:
+        required: false
+        type: boolean
+        default: false
 
 jobs:
     helm:
@@ -39,6 +43,11 @@ jobs:
         contents: write
       steps:
       - uses: actions/checkout@v4
+      - name: Refresh dependencies
+        if: inputs.HAS_SUBCHART
+        working-directory: ${{ inputs.PATH_BUILD }}
+        run: |
+            helm dependency build || helm dependency update
       - name: Build helm archive
         working-directory: ${{ inputs.PATH_BUILD }}
         run: |
