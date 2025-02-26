@@ -44,11 +44,6 @@ jobs:
         run: |
           echo "TAG=${{ inputs.TAG }}-${GITHUB_SHA::6}" >> ${GITHUB_ENV}
 
-      - name: Set Tag for dev branches
-        if: github.ref != 'refs/heads/main' && !inputs.HASH_SUFFIX
-        run: |
-          echo "TAG=${{ inputs.TAG }}-dev" >> ${GITHUB_ENV}
-
       # Need to get an ACR where to push the image
       - name: Login to Docker Hub
         uses: docker/login-action@v3
