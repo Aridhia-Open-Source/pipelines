@@ -1,0 +1,4 @@
+{
+    "name": "Version bump pipeline for Helm Charts",
+    "description": "Common helm chart version bump"
+}
