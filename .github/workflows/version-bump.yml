@@ -20,6 +20,10 @@ on:
         description: Path where the helm chart is located
         required: true
         type: string
+    secrets:
+      BUMP_APP_SECRET:
+        required: true
+        description: A github app private key to generate a GH_TOKEN to then push new versions
 
 permissions:
   contents: write
