@@ -31,6 +31,10 @@ on:
         required: false
         type: string
         default: 'false'
+      RELEASE_NOTES:
+        required: false
+        type: string
+        default: ''
       HAS_SUBCHART:
         required: false
         type: boolean
@@ -74,3 +78,4 @@ jobs:
             tag: ${{ inputs.VERSION }}
             skipIfReleaseExists: true
             makeLatest: true
+            body: ${{ inputs.RELEASE_NOTES }}
