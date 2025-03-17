@@ -47,7 +47,7 @@ jobs:
           git config --global user.name 'BotMan'
           git config --global user.email 'r-casula@users.noreply.github.com'
 
-          echo "$TEMPL_CONTENTS" | jq ".spec |= .+ {\"user\": {\"username\": \"$AUTHOR\", \"idpId\": \"$idpId\"}, \"repository\": \"${{ github.repository }}\", \"organization\": \"${{ github.repository_owner }}\"}" > ${{ inputs.TEMPLATE_PATH }}
+          echo "$TEMPL_CONTENTS" | jq ".spec |= .+ {\"user\": {\"username\": \"$AUTHOR\", \"idpId\": \"$idpId\"}, \"source\": {\"repository\": \"${{ github.repository }}\"}}" > ${{ inputs.TEMPLATE_PATH }}
           git add ${{ inputs.TEMPLATE_PATH }}
           git commit -am "Added user info"
           git push
