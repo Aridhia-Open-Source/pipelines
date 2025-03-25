@@ -51,7 +51,9 @@ jobs:
           git config --global user.name 'BotMan'
           git config --global user.email 'r-casula@users.noreply.github.com'
 
-          echo "$TEMPL_CONTENTS" | jq ".spec |= .+ {\"user\": {\"username\": \"$AUTHOR\", \"idpId\": \"$idpId\"}, \"repository\": \"${{ github.repository }}\", \"organization\": \"${{ github.repository_owner }}\"}" > ${TEMPL_PATH/.json/-$AUTHOR-$PR_NUM.json}
-          git add ${{ inputs.TEMPLATE_PATH }}
+          NEW_FILE_NAME=${TEMPL_PATH/.json/-$AUTHOR-$PR_NUM.json}
+          echo "$TEMPL_CONTENTS" | jq ".spec |= .+ {\"user\": {\"username\": \"$AUTHOR\", \"idpId\": \"$idpId\"}, \"repository\": \"${{ github.repository }}\", \"organization\": \"${{ github.repository_owner }}\"}" > ${NEW_FILE_NAME}
+
+          git add ${NEW_FILE_NAME}
           git commit -am "Added user info"
           git push
