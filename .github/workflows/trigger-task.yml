@@ -37,17 +37,23 @@ jobs:
       - name: Update values
         env:
           TEMPL_CONTENTS: ${{ steps.save-template.outputs.TEMPL_CONTENTS }}
+          TEMPL_PATH: ${{ inputs.TEMPLATE_PATH }}
         run: |
-          AUTHOR=$(gh pr list -B pipe-test --state merged --json author,mergedAt,mergedBy,headRefName,number | jq -r '.[0].author.login')
+          LATEST_PR=$(gh pr list -B pipe-test --state merged --json author,mergedAt,mergedBy,headRefName,number | jq -r '.[0]')
+          AUTHOR=$(echo $LATEST_PR | jq -r '.author.login')
+          PR_NUM=$(echo $LATEST_PR | jq -r '.number')
+
           if [[ "$AUTHOR" == 'null' ]]; then
             echo "No user found"
             exit 1
           fi
           idpId=$(gh api users/${AUTHOR} | jq -r '.id')
-          git config --global user.name 'BotMan'
-          git config --global user.email 'r-casula@users.noreply.github.com'
+          git config --global user.name "BotMan"
+          git config --global user.email "$AUTHOR@users.noreply.github.com"
 
-          echo "$TEMPL_CONTENTS" | jq ".spec |= .+ {\"user\": {\"username\": \"$AUTHOR\", \"idpId\": \"$idpId\"}, \"source\": {\"repository\": \"${{ github.repository }}\"}}" > ${{ inputs.TEMPLATE_PATH }}
-          git add ${{ inputs.TEMPLATE_PATH }}
+          NEW_FILE_NAME=${TEMPL_PATH/.json/-$AUTHOR-$PR_NUM.json}
+          echo "$TEMPL_CONTENTS" | jq ".spec |= .+ {\"user\": {\"username\": \"$AUTHOR\", \"idpId\": \"$idpId\"}, \"source\": {\"repository\": \"${{ github.repository }}\"}}" > ${NEW_FILE_NAME}
+
+          git add ${NEW_FILE_NAME}
           git commit -am "Added user info"
           git push
