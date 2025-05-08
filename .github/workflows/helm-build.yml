@@ -77,6 +77,7 @@ jobs:
           if [[ -f CHANGELOG.md ]]; then
             python -c "import re; f=open('CHANGELOG.md'); print(re.findall(r'##\s\d+\.\d+\.\d+\n[^#]+', '\n'.join(f.readlines()))[0].strip())" > ReleaseNotes.md
           fi
+          cat ReleaseNotes.md
 
       - name: Publish Release
         uses: ncipollo/release-action@v1
