@@ -57,6 +57,15 @@ jobs:
         run: |
             helm package . -d ${{ github.workspace }}/${{ inputs.PATH_CHART }} --version ${{ inputs.VERSION }} --app-version ${{ inputs.APP_VERSION }}
 
+      - name: Create Release Notes file
+        if: inputs.IS_TAG == 'true'
+        run: |
+          touch ReleaseNotes.md
+          if [[ -f CHANGELOG.md ]]; then
+            python -c "import re; f=open('CHANGELOG.md'); print(re.findall(r'##\s\d+\.\d+\.\d+\n[^#]+', '\n'.join(f.readlines()))[0].strip())" > ReleaseNotes.md
+          fi
+          cat ReleaseNotes.md
+
       - name: Push to GitHub pages
         run: |
           git config user.name "$GITHUB_ACTOR"
@@ -69,17 +78,6 @@ jobs:
           git add ${{ inputs.PAGES_BRANCH_PATH }}
           git commit -m "Version ${{ inputs.VERSION }}"
           git push
-
-      - name: Create Release Notes file
-        if: inputs.IS_TAG == 'true'
-        run: |
-          touch ReleaseNotes.md
-          git branch
-          head CHANGELOG.md
-          if [[ -f CHANGELOG.md ]]; then
-            python -c "import re; f=open('CHANGELOG.md'); print(re.findall(r'##\s\d+\.\d+\.\d+\n[^#]+', '\n'.join(f.readlines()))[0].strip())" > ReleaseNotes.md
-          fi
-          cat ReleaseNotes.md
 
       - name: Publish Release
         uses: ncipollo/release-action@v1
