@@ -74,6 +74,7 @@ jobs:
         if: inputs.IS_TAG == 'true'
         run: |
           touch ReleaseNotes.md
+          cat CHANGELOG.md
           if [[ -f CHANGELOG.md ]]; then
             python -c "import re; f=open('CHANGELOG.md'); print(re.findall(r'##\s\d+\.\d+\.\d+\n[^#]+', '\n'.join(f.readlines()))[0].strip())" > ReleaseNotes.md
           fi
