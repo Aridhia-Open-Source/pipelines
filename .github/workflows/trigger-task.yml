@@ -6,6 +6,9 @@ on:
       DEST_BRANCH:
         required: true
         type: string
+      SOURCE_BRANCH:
+        required: true
+        type: string
       TEMPLATE_PATH:
         required: true
         type: string
