@@ -3,6 +3,9 @@ run-name: update_task
 on:
   workflow_call:
     inputs:
+      SOURCE_BRANCH:
+        required: false
+        type: string
       DEST_BRANCH:
         required: true
         type: string
@@ -39,7 +42,7 @@ jobs:
           TEMPL_CONTENTS: ${{ steps.save-template.outputs.TEMPL_CONTENTS }}
           TEMPL_PATH: ${{ inputs.TEMPLATE_PATH }}
         run: |
-          LATEST_PR=$(gh pr list -B main --state merged --json author,mergedAt,mergedBy,headRefName,number | jq -r '.[0]')
+          LATEST_PR=$(gh pr list -B ${{ inputs.SOURCE_BRANCH }} --state merged --json author,mergedAt,mergedBy,headRefName,number | jq -r '.[0]')
           AUTHOR=$(echo $LATEST_PR | jq -r '.author.login')
           PR_NUM=$(echo $LATEST_PR | jq -r '.number')
 
