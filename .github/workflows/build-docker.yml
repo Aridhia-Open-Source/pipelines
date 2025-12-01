@@ -31,6 +31,9 @@ jobs:
       run:
         shell: bash
     runs-on: ubuntu-latest
+    outputs:
+      TAG: ${{ steps.output.outputs.IMAGE_TAG }}
+      FULL_IMAGE: ${{ steps.output.outputs.FULL_IMAGE }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -63,3 +66,8 @@ jobs:
           file: ${{ inputs.BUILD_PATH }}/Dockerfile
           tags: ${{ inputs.DOCKER_ACR }}/${{ env.OWNER_LC }}/${{ inputs.IMAGE }}:${{ env.TAG }}
           push: true
+      - name: Set output
+        id: output
+        run: |
+          echo "IMAGE_TAG=${{ inputs.TAG }}" >> $GITHUB_OUTPUT
+          echo "FULL_IMAGE=${{ inputs.DOCKER_ACR }}/${{ env.OWNER_LC }}/${{ inputs.IMAGE }}:${{ env.TAG }}" >> $GITHUB_OUTPUT
