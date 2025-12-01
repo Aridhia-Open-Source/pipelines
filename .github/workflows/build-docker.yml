@@ -4,7 +4,7 @@ on:
   workflow_call:
     outputs:
       IMAGE_TAG:
-        value: ${{ jobs.build.outputs.IMAGE_TAG }}
+        value: ${{ jobs.build.outputs.TAG }}
       FULL_IMAGE:
         value: ${{ jobs.build.outputs.FULL_IMAGE }}
     inputs:
