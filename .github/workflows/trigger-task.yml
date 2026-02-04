@@ -52,7 +52,7 @@ jobs:
           git config --global user.email "$AUTHOR@users.noreply.github.com"
 
           NEW_FILE_NAME=${TEMPL_PATH/.json/-$AUTHOR-$PR_NUM.json}
-          echo "$TEMPL_CONTENTS" | jq ".spec |= .+ {\"user\": {\"username\": \"$AUTHOR\", \"idpId\": \"$idpId\"}, \"source\": {\"repository\": \"${{ github.repository }}\"}}" > ${NEW_FILE_NAME}
+          echo "$TEMPL_CONTENTS" | jq ".spec |= .+ {\"source\": {\"repository\": \"${{ github.repository }}\"}}" > ${NEW_FILE_NAME}
 
           git add ${NEW_FILE_NAME}
           git commit -am "Added user info"
