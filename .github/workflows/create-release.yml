@@ -7,6 +7,10 @@ on:
         required: true
 
     inputs:
+      chartPath:
+        description: 'Path where the helm chart is'
+        required: false
+        type: string
       majorVersion:
         description: 'Bump the major version, i.e. 1.0.0 -> 2.0.0'
         required: false
@@ -60,7 +64,7 @@ jobs:
           token: ${{ steps.generate-token.outputs.token }}
       - name: Create Tag
         id: create_tag
-        working-directory: k8s/federated-node
+        working-directory: ${{ inputs.chartPath }}
         run: |
           set -e
           version=$(grep '^version:.*' Chart.yaml | sed 's/^.*: //')
