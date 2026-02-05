@@ -93,6 +93,7 @@ jobs:
       - name: Checkout scripts from template repo
         uses: actions/checkout@v4
         with:
+          ref: composite
           repository: Aridhia-Open-Source/pipelines
           path: temp-scripts
       - name: New Version Bump
@@ -112,7 +113,6 @@ jobs:
           if [[ "${{ inputs.patchVersion }}" == "true" ]]; then
             base_args+="-p "
           fi
-          ls -la
           ls -la temp-scripts
 
           NEW_VERSION=$(python3 temp-scripts/scripts/semver_bump.py -v ${{ needs.tag.outputs.current_version }} $base_args)
