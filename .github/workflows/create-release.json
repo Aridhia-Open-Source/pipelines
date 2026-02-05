@@ -1,0 +1,4 @@
+{
+    "name": "Create a release",
+    "description": "From the selected branch, creates a tag, and triggers bump version on the staging branch"
+}
