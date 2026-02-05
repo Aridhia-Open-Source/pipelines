@@ -32,6 +32,10 @@ on:
         required: true
         type: string
         default: develop
+      BUMP_APP_ID:
+        description: 'github app ID for generating a token'
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -75,7 +79,7 @@ jobs:
         id: generate-token
         uses: actions/create-github-app-token@v1
         with:
-          app-id: ${{ vars.BUMP_APP_ID }}
+          app-id: ${{ inputs.BUMP_APP_ID }}
           private-key: ${{ secrets.BUMP_APP_SECRET }}
       - name: Checkout
         uses: actions/checkout@v4
