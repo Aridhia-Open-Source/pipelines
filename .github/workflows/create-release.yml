@@ -2,6 +2,10 @@ name: Create Release
 run-name: Create Release
 on:
   workflow_call:
+    secrets:
+      BUMP_APP_SECRET:
+        required: true
+
     inputs:
       majorVersion:
         description: 'Bump the major version, i.e. 1.0.0 -> 2.0.0'
