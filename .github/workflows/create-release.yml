@@ -113,7 +113,6 @@ jobs:
           if [[ "${{ inputs.patchVersion }}" == "true" ]]; then
             base_args+="-p "
           fi
-          ls -la temp-scripts
 
           NEW_VERSION=$(python3 temp-scripts/scripts/semver_bump.py -v ${{ needs.tag.outputs.current_version }} $base_args)
 
