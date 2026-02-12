@@ -39,6 +39,10 @@ on:
         required: false
         type: boolean
         default: false
+    secrets:
+      CHART_APP_SECRET:
+        required: true
+        description: A github app private key to generate a GH_TOKEN to then push new versions
 
 jobs:
     helm:
