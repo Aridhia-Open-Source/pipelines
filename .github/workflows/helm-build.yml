@@ -65,8 +65,15 @@ jobs:
             python -c "import re; f=open('CHANGELOG.md'); print(re.findall(r'##\s\d+\.\d+\.\d+\n[^#]+', '\n'.join(f.readlines()))[0].strip())" > ReleaseNotes.md
           fi
           cat ReleaseNotes.md
-
+      - name: Generate a token
+        id: generate-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.CHART_APP_ID }}
+          private-key: ${{ secrets.CHART_APP_SECRET }}
       - name: Push to GitHub pages
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
