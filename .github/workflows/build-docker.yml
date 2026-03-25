@@ -71,6 +71,8 @@ jobs:
           file: ${{ inputs.BUILD_PATH }}/Dockerfile
           tags: ${{ inputs.DOCKER_ACR }}/${{ env.OWNER_LC }}/${{ inputs.IMAGE }}:${{ env.TAG }}
           push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
       - name: Set output
         id: output
         run: |
